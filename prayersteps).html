@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#FFCDA9" />
-  <title>ABC of Islam · Prayer Steps Carousel · Complete Edition</title>
+  <title>ABC of Islam · Prayer Steps Carousel · Huge Buttons Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -261,34 +261,34 @@
       font-weight: 800;
     }
 
-    /* ----- ENLARGED NAVIGATION BUTTONS ROW (desktop: 120% bigger, mobile: +25% bigger) ----- */
+    /* ----- HUGE NAVIGATION BUTTONS: 100% BIGGER (double the size) ----- */
     .nav-links-row {
       margin-top: 12px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: thin;
-      padding-bottom: 8px;
+      padding-bottom: 12px;
     }
     .nav-buttons-container {
       display: flex;
-      gap: 18px;                /* more spacing */
+      gap: 24px;               /* extra spacing for huge buttons */
       justify-content: flex-start;
       align-items: center;
-      padding: 8px 6px;
+      padding: 12px 8px;
       min-width: min-content;
     }
-    /* Desktop default: 120% bigger than previous 70px -> 84px width */
+    /* Desktop: double original 84px → 168px width */
     .nav-icon-btn {
       flex-shrink: 0;
-      width: 84px;              /* 70px * 1.2 = 84px */
+      width: 168px;            /* 100% bigger than previous 84px */
       background: #fff;
-      border-radius: 32px;
-      padding: 8px 10px;
-      border: 2px solid var(--peach-200);
+      border-radius: 48px;     /* more rounded for huge look */
+      padding: 16px 12px;
+      border: 3px solid var(--peach-200);
       background: #FFFEFA;
-      box-shadow: 0 8px 14px -8px rgba(0,0,0,0.1);
+      box-shadow: 0 12px 20px -10px rgba(0,0,0,0.12);
       transition: all 0.2s ease;
       cursor: pointer;
       display: flex;
@@ -296,40 +296,42 @@
       align-items: center;
     }
     .nav-icon-btn:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
       border-color: var(--peach-500);
-      box-shadow: 0 14px 22px -10px rgba(0,0,0,0.15);
+      box-shadow: 0 20px 28px -12px rgba(0,0,0,0.2);
     }
     .nav-icon-btn img {
       width: 100%;
-      max-width: 72px;          /* allow larger image */
+      max-width: 140px;        /* allow much larger images */
       height: auto;
       display: block;
       object-fit: contain;
     }
-    /* Mobile: enlarge by 25% relative to new desktop base? Actually user said "on mobile view enlarge by 25%" relative to current small size? 
-       But we already made desktop bigger. To be safe: mobile buttons 25% bigger than previous mobile size (58px -> 72.5px). 
-       We'll set mobile width to 74px which is ~27% bigger than old 58px, readable. */
+    /* Mobile: double previous mobile size (74px → 148px) */
     @media (max-width: 640px) {
       .nav-icon-btn {
-        width: 74px;            /* ~25% bigger than original 58px */
-        padding: 6px 8px;
+        width: 148px;
+        padding: 12px 10px;
+        border-radius: 40px;
       }
       .nav-icon-btn img {
-        max-width: 64px;
+        max-width: 120px;
+      }
+      .nav-buttons-container {
+        gap: 18px;
+      }
+    }
+    /* Very small devices: keep slightly smaller but still huge */
+    @media (max-width: 480px) {
+      .nav-icon-btn {
+        width: 130px;
+        padding: 10px 8px;
+      }
+      .nav-icon-btn img {
+        max-width: 105px;
       }
       .nav-buttons-container {
         gap: 14px;
-      }
-    }
-    /* Very small devices: keep touch friendly */
-    @media (max-width: 480px) {
-      .nav-icon-btn {
-        width: 70px;
-        padding: 5px 6px;
-      }
-      .nav-icon-btn img {
-        max-width: 58px;
       }
     }
 
@@ -408,7 +410,7 @@
       <div class="counter" id="counter"><span id="cur">1</span> / <strong id="total">13</strong></div>
     </div>
 
-    <!-- Navigation buttons row (section links) - enlarged for readability -->
+    <!-- Navigation buttons row (section links) - now 100% bigger (doubled size) -->
     <div class="nav-links-row">
       <div class="nav-buttons-container" id="navButtonsRow"></div>
     </div>
@@ -563,7 +565,7 @@
       progressBar.style.width = "0%";
     }
 
-    /* build nav buttons row (enlarged already by CSS) */
+    /* build nav buttons row (huge buttons) */
     navButtonsList.forEach(btn => {
       const link = document.createElement("a");
       link.href = btn.url;
