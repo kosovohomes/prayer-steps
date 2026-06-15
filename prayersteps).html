@@ -80,24 +80,26 @@
       min-height: 100dvh;
     }
 
-    /* header */
+    /* header with clickable logo image */
     .app-header {
       display: flex; align-items: center; justify-content: space-between;
       gap: 12px; flex-wrap: wrap;
     }
     .brand {
       display: inline-flex; align-items: center; gap: 10px;
-      font-family: "Baloo 2", "Fredoka", sans-serif;
-      font-weight: 800; font-size: clamp(1.1rem, 2.1vw, 1.5rem);
-      color: var(--peach-900);
-      letter-spacing: .2px;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+      cursor: pointer;
     }
-    .brand .badge {
-      width: 38px; height: 38px; border-radius: 14px;
-      background: linear-gradient(145deg, var(--peach-500), var(--peach-700));
-      display: grid; place-items: center; color: #fff;
-      box-shadow: 0 8px 14px -4px rgba(235, 154, 110, 0.5);
-      font-size: 1.1rem; font-weight: 800;
+    .brand:hover {
+      transform: scale(1.02);
+    }
+    .brand .logo-img {
+      height: 46px;
+      width: auto;
+      max-width: 180px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.05));
     }
     .toolbar { display: inline-flex; align-items: center; gap: 8px; }
     .icon-btn {
@@ -111,6 +113,12 @@
     .icon-btn:active { transform: translateY(0); }
     .icon-btn svg { width: 18px; height: 18px; }
     .icon-btn[aria-pressed="true"] { background: var(--peach-500); color: #fff; border-color: var(--peach-500); }
+    .voice-btn {
+      background: linear-gradient(145deg, #FFE0C4, #FFD2B0);
+      border-color: var(--peach-300);
+      color: var(--peach-900);
+    }
+    .voice-btn:hover { background: var(--peach-300); }
 
     /* stage + carousel with 9:16 ratio */
     .stage {
@@ -127,6 +135,7 @@
       max-height: min(72dvh, 620px);
       box-shadow: var(--shadow-lg);
       border-radius: var(--radius-card);
+      background: #FFF3E8;
     }
 
     /* slide */
@@ -141,15 +150,21 @@
       transition: transform var(--t-slow), opacity var(--t-slow), filter var(--t-slow);
       will-change: transform, opacity;
       cursor: grab;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .slide.dragging { cursor: grabbing; }
     .slide img {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; user-select: none; -webkit-user-drag: none;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
       pointer-events: none;
+      background: #FFF3E8;
     }
 
-    /* slide positioning states */
     .slide[data-state="active"]   { transform: translateX(0)      scale(1);    opacity: 1;  filter: none;              z-index: 3; }
     .slide[data-state="prev"]     { transform: translateX(-105%)  scale(.88);  opacity: 0;  filter: blur(2px);         z-index: 2; pointer-events: none; }
     .slide[data-state="next"]     { transform: translateX( 105%)  scale(.88);  opacity: 0;  filter: blur(2px);         z-index: 2; pointer-events: none; }
@@ -159,11 +174,11 @@
 
     .slide::after {
       content: ""; position: absolute; inset: 0;
-      background: linear-gradient(120deg, transparent 35%, rgba(255,235,210,0.2) 50%, transparent 65%);
-      pointer-events: none; mix-blend-mode: overlay;
+      background: linear-gradient(120deg, transparent 35%, rgba(255,235,210,0.15) 50%, transparent 65%);
+      pointer-events: none;
+      mix-blend-mode: overlay;
     }
 
-    /* navigation arrows */
     .nav {
       position: absolute; top: 50%; transform: translateY(-50%);
       width: 48px; height: 48px; border-radius: 50%;
@@ -186,7 +201,7 @@
       .nav { width: 42px; height: 42px; }
     }
 
-    /* controls */
+    /* controls + nav buttons row */
     .controls {
       display: flex; flex-direction: column; align-items: center; gap: 12px;
       margin-top: 8px;
@@ -214,7 +229,6 @@
       background: linear-gradient(90deg, var(--peach-500), var(--pink-500));
     }
 
-    /* autoplay progress bar */
     .progress {
       position: absolute; left: 18px; right: 18px; top: 16px;
       height: 4px; border-radius: 6px; background: rgba(255,240,220,0.7);
@@ -228,7 +242,6 @@
       border-radius: 6px;
     }
 
-    /* caption */
     .caption {
       font-family: "Baloo 2", "Fredoka", sans-serif;
       font-weight: 700; color: var(--ink-700);
@@ -248,15 +261,62 @@
       font-weight: 800;
     }
 
+    /* ----- navigation buttons row (section links) ----- */
+    .nav-links-row {
+      margin-top: 6px;
+      margin-bottom: 8px;
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      padding-bottom: 6px;
+    }
+    .nav-buttons-container {
+      display: flex;
+      gap: 14px;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 8px 4px;
+      min-width: min-content;
+    }
+    .nav-icon-btn {
+      flex-shrink: 0;
+      width: 70px;
+      background: #fff;
+      border-radius: 28px;
+      padding: 6px 8px;
+      border: 2px solid var(--peach-200);
+      background: #FFFEFA;
+      box-shadow: 0 6px 12px -6px rgba(0,0,0,0.08);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .nav-icon-btn:hover {
+      transform: translateY(-3px);
+      border-color: var(--peach-500);
+      box-shadow: 0 10px 18px -8px rgba(0,0,0,0.12);
+    }
+    .nav-icon-btn img {
+      width: 100%;
+      max-width: 54px;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+    @media (max-width: 540px) {
+      .nav-icon-btn { width: 58px; padding: 4px 6px; }
+    }
+
     @media (max-width: 540px) {
       .carousel { max-width: 86vw; }
       .caption { font-size: .9rem; backdrop-filter: none; background: transparent; }
     }
-
-    .nav:focus-visible, .icon-btn:focus-visible, .dot:focus-visible {
+    .nav:focus-visible, .icon-btn:focus-visible, .dot:focus-visible, .nav-icon-btn:focus-visible {
       outline: 3px solid var(--peach-500); outline-offset: 3px;
     }
-
     @media (prefers-reduced-motion: reduce) {
       .slide, .bg-decor .star { transition: none !important; animation: none !important; }
     }
@@ -274,11 +334,17 @@
 
   <main class="page">
     <header class="app-header">
-      <div class="brand">
-        <span class="badge">أ</span>
-        <span>ABC of Islam · Prayer Steps</span>
-      </div>
+      <!-- clickable logo image linking to abcofislam.com -->
+      <a href="https://abcofislam.com" class="brand" target="_blank" rel="noopener noreferrer" aria-label="ABC of Islam homepage">
+        <img src="https://ik.imagekit.io/4zbzbdytp/ABC_of_ISLAM-removebg-preview.png?updatedAt=1781355294472" 
+             alt="ABC of Islam logo" class="logo-img" />
+      </a>
       <div class="toolbar" role="group" aria-label="Carousel tools">
+        <button class="icon-btn voice-btn" id="voiceBtn" aria-label="Read current slide text aloud" title="Listen to description">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="18" height="18">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          </svg>
+        </button>
         <button class="icon-btn" id="autoplayBtn" aria-pressed="false" aria-label="Toggle autoplay" title="Toggle autoplay">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path id="autoplayIcon" d="M8 5v14l11-7z"/>
@@ -318,76 +384,44 @@
       <div class="dots" id="dots" role="tablist" aria-label="Choose slide"></div>
       <div class="counter" id="counter"><span id="cur">1</span> / <strong id="total">13</strong></div>
     </div>
+
+    <!-- Navigation buttons row (section links) -->
+    <div class="nav-links-row">
+      <div class="nav-buttons-container" id="navButtonsRow">
+        <!-- 9 buttons will be injected via JS -->
+      </div>
+    </div>
   </main>
 
   <script>
-    /* ---------- complete set of 13 unique images from your list ---------- */
+    /* ---------- complete set of 13 unique prayer images ---------- */
     const slides = [
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/abc_islam_logo_1.png?updatedAt=1781449111569", 
-        label: "🌙 ABC of Islam", 
-        text: "Welcome to the prayer journey! Discover the beauty of Salah, step by step." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_01_what_is_salah.png?updatedAt=1781391660860", 
-        label: "📖 What is Salah?", 
-        text: "Salah is the second pillar of Islam — a direct connection between a believer and Allah." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_02_five_daily_prayers.png?updatedAt=1781391661990", 
-        label: "⏰ Five Daily Prayers", 
-        text: "Fajr, Dhuhr, Asr, Maghrib, Isha — five special moments to remember Allah every day." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_03_wudu.png?updatedAt=1781391662355", 
-        label: "💧 Wudu (Ablution)", 
-        text: "Purify yourself with water before prayer. Cleanliness is half of faith." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_04_facing_qiblah.png?updatedAt=1781391662496", 
-        label: "🕋 Facing the Qiblah", 
-        text: "Muslims around the world face the Kaaba in Makkah during Salah — a symbol of unity." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_05_niyyah.png?updatedAt=1781391660765", 
-        label: "❤️ Niyyah (Intention)", 
-        text: "Begin with a sincere intention in your heart. Which prayer are you about to offer?" 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_06_takbir.png?updatedAt=1781391660313", 
-        label: "📢 Takbir", 
-        text: "Raise your hands and say 'Allahu Akbar' (Allah is the Greatest). The prayer has begun." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_09_standing_after_ruku.png?updatedAt=1781391662306", 
-        label: "🧎‍♂️ Standing after Ruku", 
-        text: "Rise up and say 'Sami Allahu liman hamidah' — Allah hears those who praise Him." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_10_first_sujood.png?updatedAt=1781391661625", 
-        label: "🕌 First Sujood (Prostration)", 
-        text: "Place your forehead on the ground, glorify Allah: 'Subhana Rabbiyal A'la'." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_11_sitting_between_sujoods.png?updatedAt=1781391661208", 
-        label: "🧘 Sitting Between Sujoods", 
-        text: "Sit briefly, ask for forgiveness, then prepare for the second prostration." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_12_second_sujood.png?updatedAt=1781391659589", 
-        label: "🕌 Second Sujood", 
-        text: "Prostrate again, repeating the same dhikr. One rak'ah is now complete." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_13_tashahhud.png?updatedAt=1781391661070", 
-        label: "🙏 Tashahhud", 
-        text: "Sit and recite the testimony of faith, sending blessings upon the Prophet (ﷺ)." 
-      },
-      { 
-        src: "https://ik.imagekit.io/4zbzbdytp/card_15_complete_prayer_review.png?updatedAt=1781391660128", 
-        label: "✨ Complete Prayer", 
-        text: "Masha'Allah! You've learned the core steps. Practice with love and devotion." 
-      }
+      { src: "https://ik.imagekit.io/4zbzbdytp/abc_islam_logo_1.png?updatedAt=1781449111569", label: "🌙 ABC of Islam", text: "Welcome to the prayer journey! Discover the beauty of Salah, step by step." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_01_what_is_salah.png?updatedAt=1781391660860", label: "📖 What is Salah?", text: "Salah is the second pillar of Islam — a direct connection between a believer and Allah." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_02_five_daily_prayers.png?updatedAt=1781391661990", label: "⏰ Five Daily Prayers", text: "Fajr, Dhuhr, Asr, Maghrib, Isha — five special moments to remember Allah every day." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_03_wudu.png?updatedAt=1781391662355", label: "💧 Wudu (Ablution)", text: "Purify yourself with water before prayer. Cleanliness is half of faith." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_04_facing_qiblah.png?updatedAt=1781391662496", label: "🕋 Facing the Qiblah", text: "Muslims around the world face the Kaaba in Makkah during Salah — a symbol of unity." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_05_niyyah.png?updatedAt=1781391660765", label: "❤️ Niyyah (Intention)", text: "Begin with a sincere intention in your heart. Which prayer are you about to offer?" },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_06_takbir.png?updatedAt=1781391660313", label: "📢 Takbir", text: "Raise your hands and say 'Allahu Akbar' (Allah is the Greatest). The prayer has begun." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_09_standing_after_ruku.png?updatedAt=1781391662306", label: "🧎‍♂️ Standing after Ruku", text: "Rise up and say 'Sami Allahu liman hamidah' — Allah hears those who praise Him." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_10_first_sujood.png?updatedAt=1781391661625", label: "🕌 First Sujood (Prostration)", text: "Place your forehead on the ground, glorify Allah: 'Subhana Rabbiyal A'la'." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_11_sitting_between_sujoods.png?updatedAt=1781391661208", label: "🧘 Sitting Between Sujoods", text: "Sit briefly, ask for forgiveness, then prepare for the second prostration." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_12_second_sujood.png?updatedAt=1781391659589", label: "🕌 Second Sujood", text: "Prostrate again, repeating the same dhikr. One rak'ah is now complete." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_13_tashahhud.png?updatedAt=1781391661070", label: "🙏 Tashahhud", text: "Sit and recite the testimony of faith, sending blessings upon the Prophet (ﷺ)." },
+      { src: "https://ik.imagekit.io/4zbzbdytp/card_15_complete_prayer_review.png?updatedAt=1781391660128", label: "✨ Complete Prayer", text: "Masha'Allah! You've learned the core steps. Practice with love and devotion." }
+    ];
+
+    /* ---------- Nav buttons data (9 images, all link to abcofislam.com for now) ---------- */
+    const navButtonsList = [
+      { src: "https://ik.imagekit.io/4zbzbdytp/nav_button_5_prophet_stories.png", label: "Prophet Stories", url: "https://abcofislam.com" },
+      { src: "https://ik.imagekit.io/4zbzbdytp/nav_button_3_five_pillars.png", label: "Five Pillars", url: "https://abcofislam.com" },
+      { src: "https://ik.imagekit.io/4zbzbdytp/nav_button_6_yusuf_story.png", label: "Yusuf Story", url: "https://abcofislam.com" },
+      { src: "https://ik.imagekit.io/4zbzbdytp/nav_button_9_good_manners.png", label: "Good Manners", url: "https://abcofislam.com" },
+      { src: "https://ik.imagekit.io/4zbzbdytp/six_beliefs_nav_button(1).png", label: "Six Beliefs", url: "https://abcofislam.com" },
+      { src: "https://ik.imagekit.io/4zbzbdytp/nav_button_4_quran_stories.png", label: "Quran Stories", url: "https://abcofislam.com" },
+      { src: "https://ik.imagekit.io/4zbzbdytp/nav_button_8_daily_duas.png", label: "Daily Duas", url: "https://abcofislam.com" },
+      { src: "https://ik.imagekit.io/4zbzbdytp/nav_button_7_how_to_pray.png", label: "How to Pray", url: "https://abcofislam.com" },
+      { src: "https://ik.imagekit.io/4zbzbdytp/nav_button_2_six_beliefs.png", label: "Six Beliefs II", url: "https://abcofislam.com" }
     ];
 
     /* ---------- DOM references ---------- */
@@ -405,6 +439,8 @@
     const progressEl  = document.getElementById("progress");
     const progressBar = progressEl.querySelector("i");
     const fsBtn       = document.getElementById("fsBtn");
+    const voiceBtn    = document.getElementById("voiceBtn");
+    const navRow      = document.getElementById("navButtonsRow");
 
     /* ---------- build slides & dots ---------- */
     const total = slides.length;
@@ -437,6 +473,25 @@
     let progressRaf = null;
     const AUTOPLAY_MS = 5500;
 
+    /* ---------- Speech synthesis ---------- */
+    let speechSynth = window.speechSynthesis;
+    let currentUtterance = null;
+    function stopSpeaking() {
+      if (speechSynth && speechSynth.speaking) speechSynth.cancel();
+    }
+    function readCurrentSlide() {
+      if (!speechSynth) return alert("Speech not supported");
+      stopSpeaking();
+      const slide = slides[index];
+      const textToRead = `${slide.label}. ${slide.text}`;
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.lang = "en-US";
+      utterance.rate = 0.95;
+      utterance.onend = () => { currentUtterance = null; };
+      currentUtterance = utterance;
+      speechSynth.speak(utterance);
+    }
+
     function applyState() {
       slideEls.forEach((el, i) => {
         const diff = i - index;
@@ -448,39 +503,29 @@
         else                  state = "far-next";
         el.dataset.state = state;
       });
-
-      dotEls.forEach((d, i) => {
-        d.setAttribute("aria-current", i === index ? "true" : "false");
-      });
-
+      dotEls.forEach((d, i) => d.setAttribute("aria-current", i === index ? "true" : "false"));
       const s = slides[index];
       captionStep.textContent = s.label;
       captionText.textContent = s.text;
       curEl.textContent = index + 1;
       carouselEl.setAttribute("aria-label", `Slide ${index + 1} of ${total}: ${s.label}`);
-
       prevBtn.disabled = index === 0;
       nextBtn.disabled = index === total - 1;
-
-      if (autoplay) startProgress();
-      else stopProgress();
+      if (autoplay) startProgress(); else stopProgress();
     }
 
     function go(to) {
       index = Math.max(0, Math.min(total - 1, to));
       applyState();
+      if (speechSynth && speechSynth.speaking) speechSynth.cancel();
     }
     function next() { if (index < total - 1) go(index + 1); else if (autoplay) go(0); }
     function prev() { if (index > 0) go(index - 1); }
 
-    /* ---------- autoplay logic ---------- */
     function setAutoplay(on) {
       autoplay = on;
       autoplayBtn.setAttribute("aria-pressed", String(on));
-      autoplayIcon.setAttribute("d", on
-        ? "M6 5h4v14H6zM14 5h4v14h-4z"        // pause
-        : "M8 5v14l11-7z"                      // play
-      );
+      autoplayIcon.setAttribute("d", on ? "M6 5h4v14H6zM14 5h4v14h-4z" : "M8 5v14l11-7z");
       if (on) startProgress(); else stopProgress();
     }
     function startProgress() {
@@ -491,11 +536,8 @@
         const elapsed = (now - start);
         let t = Math.min(1, elapsed / AUTOPLAY_MS);
         progressBar.style.width = (t * 100) + "%";
-        if (t < 1 && autoplay) {
-          progressRaf = requestAnimationFrame(tick);
-        } else if (t >= 1 && autoplay) {
-          next();
-        }
+        if (t < 1 && autoplay) progressRaf = requestAnimationFrame(tick);
+        else if (t >= 1 && autoplay) next();
       };
       progressRaf = requestAnimationFrame(tick);
     }
@@ -506,48 +548,55 @@
       progressBar.style.width = "0%";
     }
 
+    /* build nav buttons row (all link to abcofislam.com) */
+    navButtonsList.forEach(btn => {
+      const link = document.createElement("a");
+      link.href = btn.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.className = "nav-icon-btn";
+      link.setAttribute("aria-label", btn.label);
+      const img = document.createElement("img");
+      img.src = btn.src;
+      img.alt = btn.label;
+      img.loading = "lazy";
+      link.appendChild(img);
+      navRow.appendChild(link);
+    });
+
     /* ---------- event listeners ---------- */
     prevBtn.addEventListener("click", () => { prev(); if (autoplay) startProgress(); });
     nextBtn.addEventListener("click", () => { next(); if (autoplay) startProgress(); });
-
-    dotEls.forEach((d) => d.addEventListener("click", () => {
+    dotEls.forEach(d => d.addEventListener("click", () => {
       go(parseInt(d.dataset.index, 10));
       if (autoplay) startProgress();
     }));
-
     autoplayBtn.addEventListener("click", () => setAutoplay(!autoplay));
-
     fsBtn.addEventListener("click", () => {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen?.();
-      } else {
-        document.exitFullscreen?.();
-      }
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
     });
+    voiceBtn.addEventListener("click", (e) => { e.stopPropagation(); readCurrentSlide(); });
 
-    /* keyboard navigation */
     window.addEventListener("keydown", (e) => {
-      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+      if (e.target?.tagName === "INPUT") return;
       if (e.key === "ArrowRight" || e.key === "ArrowDown") { next(); if (autoplay) startProgress(); e.preventDefault(); }
       if (e.key === "ArrowLeft"  || e.key === "ArrowUp")   { prev(); if (autoplay) startProgress(); e.preventDefault(); }
       if (e.key === "Home") { go(0);  if (autoplay) startProgress(); e.preventDefault(); }
       if (e.key === "End")  { go(total - 1); if (autoplay) startProgress(); e.preventDefault(); }
       if (e.key === " " || e.key === "Spacebar" || e.key.toLowerCase() === "p") { setAutoplay(!autoplay); e.preventDefault(); }
+      if (e.key === "r" || e.key === "R") { readCurrentSlide(); e.preventDefault(); }
     });
 
-    /* touch & mouse drag / swipe */
     let startX = 0, dx = 0, dragging = false, dragged = false;
     const SWIPE_THRESHOLD = 55;
-    const onStart = (x) => { dragging = true; dragged = false; startX = x; dx = 0; slideEls[index].classList.add("dragging"); stopProgress(); };
-    const onMove  = (x) => { if (!dragging) return; dx = x - startX; if (Math.abs(dx) > 5) dragged = true; };
-    const onEnd   = () => {
+    const onStart = (x) => { dragging = true; dragged = false; startX = x; dx = 0; slideEls[index]?.classList.add("dragging"); stopProgress(); };
+    const onMove = (x) => { if (!dragging) return; dx = x - startX; if (Math.abs(dx) > 5) dragged = true; };
+    const onEnd = () => {
       if (!dragging) return;
-      const active = slideEls[index];
-      active.classList.remove("dragging");
+      slideEls[index]?.classList.remove("dragging");
       dragging = false;
-      if (Math.abs(dx) > SWIPE_THRESHOLD) {
-        if (dx < 0) next(); else prev();
-      }
+      if (Math.abs(dx) > SWIPE_THRESHOLD) { if (dx < 0) next(); else prev(); }
       dx = 0; dragged = false;
       if (autoplay) startProgress();
     };
@@ -558,8 +607,7 @@
     window.addEventListener("mousemove",      (e) => onMove(e.clientX));
     window.addEventListener("mouseup",        onEnd);
 
-    /* click on slide to go forward/back (tap zones) */
-    slideEls.forEach((el) => el.addEventListener("click", (e) => {
+    slideEls.forEach(el => el.addEventListener("click", (e) => {
       if (dragged) return;
       const rect = el.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width;
@@ -568,13 +616,11 @@
       if (autoplay) startProgress();
     }));
 
-    /* pause autoplay when tab hidden */
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) stopProgress();
       else if (autoplay) startProgress();
     });
 
-    /* boot */
     applyState();
   </script>
 </body>
